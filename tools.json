@@ -1,0 +1,10 @@
+{
+  "package": "OpenMSDatabaseSuitability",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "DatabaseSuitability",
+      "category": "Quality Control"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+#pragma once
+#define OPENMS_GET_TEST_DATA_PATH(file) "@CF_OPENMS_TEST_DATA_PATH@" file

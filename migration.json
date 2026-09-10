@@ -1,0 +1,26 @@
+{
+  "original_core_revision": "4fdec46b205459b92e7d3b9e56df5d8e912d5c85",
+  "original_topp_revision": "582535805581f2bdf4f3871d6802a0b45a3abe36",
+  "transfers": [
+    {
+      "original": "packages/topp/src/DatabaseSuitability.cpp",
+      "destination": "src/DatabaseSuitability.cpp",
+      "sha256": "88531c1b57cf92666db6cbc6c44b72322d4ed7af46a8106a6b31add741b6e637"
+    },
+    {
+      "original": "packages/core/src/openms/include/OpenMS/QC/DBSuitability.h",
+      "destination": "include/OpenMS/QC/DBSuitability.h",
+      "sha256": "8741fd0a713288a257f7dc4592d7b818474221e8f3ea451e50359c10c9448017"
+    },
+    {
+      "original": "packages/core/src/openms/source/QC/DBSuitability.cpp",
+      "destination": "source/QC/DBSuitability.cpp",
+      "sha256": "cb4f5d99ae28a109a3197a374707a8324ca34124c07769b8392ccc4d1b1d7d3d"
+    },
+    {
+      "original": "packages/core/src/tests/class_tests/openms/source/DBSuitability_test.cpp",
+      "destination": "tests/source/DBSuitability_test.cpp",
+      "sha256": "2503ac944237457dfb52d78cf7c0124a17e4d6ef4127a2297af7c2de0624fb4a"
+    }
+  ]
+}
