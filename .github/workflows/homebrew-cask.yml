@@ -37,5 +37,6 @@ jobs:
           brew tap okohlbacher/openms4-core https://github.com/okohlbacher/OpenMS4-core
           brew tap okohlbacher/openms4-database-suitability https://github.com/okohlbacher/OpenMS4-database-suitability
           brew install --cask okohlbacher/openms4-database-suitability/openms4-database-suitability
-          DatabaseSuitability --help
+          DatabaseSuitability -write_ini "$RUNNER_TEMP/DatabaseSuitability.ini"
+          test -s "$RUNNER_TEMP/DatabaseSuitability.ini"
           brew uninstall --cask openms4-database-suitability
