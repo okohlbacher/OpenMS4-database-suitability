@@ -193,17 +193,17 @@ START_SECTION(void compute(PeptideIdentificationList&& pep_ids, const MSExperime
   p.setValue("disable_correction", "true");
   p.setValue("reranking_cutoff_percentile", 1.);
   s.setParameters(p);
-  s.compute(move(pep_ids), empty_exp, empty_fasta, empty_fasta, empty_params);
+  s.compute(std::move(pep_ids), empty_exp, empty_fasta, empty_fasta, empty_params);
 
   p.setValue("reranking_cutoff_percentile", 1./3);
   p.setValue("FDR", 0.);
   s.setParameters(p);
-  s.compute(move(pep_ids_2), empty_exp, empty_fasta, empty_fasta, empty_params);
-  s.compute(move(top_decoy), empty_exp, empty_fasta, empty_fasta, empty_params);
+  s.compute(std::move(pep_ids_2), empty_exp, empty_fasta, empty_fasta, empty_params);
+  s.compute(std::move(top_decoy), empty_exp, empty_fasta, empty_fasta, empty_params);
 
   p.setValue("reranking_cutoff_percentile", 0.);
   s.setParameters(p);
-  s.compute(move(pep_ids_3), empty_exp, empty_fasta, empty_fasta, empty_params);
+  s.compute(std::move(pep_ids_3), empty_exp, empty_fasta, empty_fasta, empty_params);
   vector<DBSuitability::SuitabilityData> d = s.getResults();
   DBSuitability::SuitabilityData data_fract_1 = d[0];
   DBSuitability::SuitabilityData data_fract_05 = d[1];
@@ -234,9 +234,9 @@ START_SECTION(void compute(PeptideIdentificationList&& pep_ids, const MSExperime
   TEST_REAL_SIMILAR(data_small_percentile.suitability, 2./5);
   TEST_EQUAL(data_decoy_top.suitability, DBL_MAX);
 
-  TEST_EXCEPTION_WITH_MESSAGE(Exception::Precondition, s.compute(move(FDR_id), empty_exp, empty_fasta, empty_fasta, empty_params), "q-value found at PeptideIdentifications. That is not allowed! Please make sure FDR did not run previously.");
-  TEST_EXCEPTION_WITH_MESSAGE(Exception::MissingInformation, s.compute(move(few_decoys), empty_exp, empty_fasta, empty_fasta, empty_params), "Under 20 % of peptide identifications have two decoy hits. This is not enough for re-ranking. Use the 'no_rerank' flag to still compute a suitability score.");
-  TEST_EXCEPTION_WITH_MESSAGE(Exception::MissingInformation, s.compute(move(no_xcorr_ids), empty_exp, empty_fasta, empty_fasta, empty_params), "No cross correlation score found at peptide hit. Only Comet search engine is supported for re-ranking. Set 'force' flag to use the default score for this. This may result in undefined behaviour and is not advised.");
+  TEST_EXCEPTION_WITH_MESSAGE(Exception::Precondition, s.compute(std::move(FDR_id), empty_exp, empty_fasta, empty_fasta, empty_params), "q-value found at PeptideIdentifications. That is not allowed! Please make sure FDR did not run previously.");
+  TEST_EXCEPTION_WITH_MESSAGE(Exception::MissingInformation, s.compute(std::move(few_decoys), empty_exp, empty_fasta, empty_fasta, empty_params), "Under 20 % of peptide identifications have two decoy hits. This is not enough for re-ranking. Use the 'no_rerank' flag to still compute a suitability score.");
+  TEST_EXCEPTION_WITH_MESSAGE(Exception::MissingInformation, s.compute(std::move(no_xcorr_ids), empty_exp, empty_fasta, empty_fasta, empty_params), "No cross correlation score found at peptide hit. Only Comet search engine is supported for re-ranking. Set 'force' flag to use the default score for this. This may result in undefined behaviour and is not advised.");
 
   // Corrected Suitability is to complicated to be tested here.
   // The tests for the DatabaseSuitability TOPP tool have to suffice.
