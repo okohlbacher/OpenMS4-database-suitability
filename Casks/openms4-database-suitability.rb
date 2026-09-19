@@ -1,9 +1,9 @@
 cask "openms4-database-suitability" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.0.0-ci.5,0cdbd1a0571b"
-  sha256 arm:   "c680a0d01b690c303a9325a113c56ffd182f507c84e100df81de4f2395112343",
-         intel: "753d43dda726d2deb12d1bdedb1b117e1ac9cd0c8b3c1fc51be54616d9923aef"
+  version "1.0.0-ci.6,51cc65fd9ac7"
+  sha256 arm:   "4d4e08129c4391ae84058c0869ff8c67612712c2f862fa4b371882821e08b60f",
+         intel: "98bcd4a70834bb9d1441d5317613faf6784566d98e7a0c9d6bdb68b3de59bd45"
 
   url "https://github.com/okohlbacher/OpenMS4-database-suitability/releases/download/" \
       "database-suitability-v#{version.csv.first}/OpenMS4-database-suitability-macos-#{arch}-Homebrew-#{version.csv.second}.tar.gz"
@@ -21,9 +21,9 @@ cask "openms4-database-suitability" do
   preflight do
     config = "#{HOMEBREW_PREFIX}/opt/openms4-core/lib/cmake/OpenMS/OpenMSConfig.cmake"
     core = File.exist?(config) ? File.read(config)[/set\(OpenMS_SOURCE_REVISION "([0-9a-f]{40})"\)/, 1] : nil
-    next if core == "eb58e981d7e0864634b59230874a56a1512369f7"
+    next if core == "7d90cec8718d28518527acc10b495550f106de26"
 
-    raise Cask::CaskError, "openms4-database-suitability #{version.csv.first} was built against openms4-core eb58e981d7e0, " \
+    raise Cask::CaskError, "openms4-database-suitability #{version.csv.first} was built against openms4-core 7d90cec8718d, " \
                            "but the installed openms4-core is #{core&.slice(0, 12) || "unknown"}. " \
                            "Install the openms4-database-suitability release built for the installed Core."
   end
