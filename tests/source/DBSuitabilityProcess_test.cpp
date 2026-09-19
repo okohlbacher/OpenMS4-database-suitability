@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 #include "DBSuitabilityTestAccess.h"
 #include <OpenMS/CONCEPT/ClassTest.h>
+#include <OpenMS/SYSTEM/PathUtils.h>
 #include <OpenMS/CONCEPT/Exception.h>
 #include <OpenMS/CONCEPT/LogStream.h>
 #include <OpenMS/KERNEL/MSExperiment.h>
@@ -49,7 +50,7 @@ namespace
 
   std::string readReceipt(const std::string& path)
   {
-    std::ifstream input(std::filesystem::u8path(path));
+    std::ifstream input(OpenMS::to_path(path));
     return std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
   }
 }
@@ -57,8 +58,8 @@ namespace
 START_TEST(DBSuitabilityProcess, "$Id$")
 
 OpenMS::File::TempDir fixture;
-const auto adapter = std::filesystem::u8path(DBSUITABILITY_FAKE_ADAPTER);
-std::filesystem::copy_file(adapter, std::filesystem::u8path(fixture.getPath()) / adapter.filename());
+const auto adapter = OpenMS::to_path(DBSUITABILITY_FAKE_ADAPTER);
+std::filesystem::copy_file(adapter, OpenMS::to_path(fixture.getPath()) / adapter.filename());
 ScopedPath path(fixture.getPath());
 
 OpenMS::MSSpectrum spectrum;
@@ -88,14 +89,14 @@ START_SECTION((Adapter resolves through PATH, receives serialized inputs, and re
   TEST_STRING_EQUAL(peptides.at(0).getHits().at(0).getMetaValue("target_decoy").toString(), "target")
   TEST_STRING_EQUAL(peptides.at(1).getHits().at(0).getMetaValue("target_decoy").toString(), "decoy")
   TEST_STRING_EQUAL(readReceipt(fixture.getPath() + "receipt.txt"), "validated INI, mzML, FASTA and working directory\n")
-  const auto temporary = std::filesystem::u8path(parameters.getValue(prefix + "in").toString()).parent_path();
+  const auto temporary = OpenMS::to_path(parameters.getValue(prefix + "in").toString()).parent_path();
   TEST_EQUAL(std::filesystem::exists(temporary), false)
 }
 END_SECTION
 
 START_SECTION((Adapter failure preserves its diagnostic and cleans temporary inputs))
 {
-  std::filesystem::remove(std::filesystem::u8path(fixture.getPath() + "receipt.txt"));
+  std::filesystem::remove(OpenMS::to_path(fixture.getPath() + "receipt.txt"));
   parameters.setValue(prefix + "mode", "fail");
   OpenMS::DBSuitability_friend driver;
   ErrorCapture errors;
@@ -114,7 +115,7 @@ START_SECTION((Adapter failure preserves its diagnostic and cleans temporary inp
   TEST_EQUAL(errors.stream.str().find("FAKE_ADAPTER_STDOUT") != std::string::npos, true)
   TEST_EQUAL(errors.stream.str().find("FAKE_ADAPTER_FAILURE: intentional exit 7") != std::string::npos, true)
   TEST_STRING_EQUAL(readReceipt(fixture.getPath() + "receipt.txt"), "validated INI, mzML, FASTA and working directory\n")
-  const auto temporary = std::filesystem::u8path(parameters.getValue(prefix + "in").toString()).parent_path();
+  const auto temporary = OpenMS::to_path(parameters.getValue(prefix + "in").toString()).parent_path();
   TEST_EQUAL(std::filesystem::exists(temporary), false)
 }
 END_SECTION
