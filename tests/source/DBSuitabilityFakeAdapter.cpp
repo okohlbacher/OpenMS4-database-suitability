@@ -8,6 +8,7 @@
 #include <OpenMS/KERNEL/MSExperiment.h>
 #include <OpenMS/METADATA/PeptideHit.h>
 #include <OpenMS/METADATA/PeptideIdentification.h>
+#include <OpenMS/SYSTEM/PathUtils.h>
 #include <OpenMS/METADATA/PeptideIdentificationList.h>
 #include <OpenMS/METADATA/ProteinIdentification.h>
 
@@ -33,7 +34,7 @@ int main(int argc, char** argv)
     const auto directory = std::filesystem::current_path();
     const auto is_temporary = [&](const std::string& value, const std::string& filename)
     {
-      const auto path = std::filesystem::u8path(value);
+      const auto path = OpenMS::to_path(value);
       return path.filename() == filename && std::filesystem::equivalent(path.parent_path(), directory);
     };
     if (!is_temporary(argv[2], "parameters.INI") || !is_temporary(input, "spectra.mzML") ||
@@ -53,7 +54,7 @@ int main(int argc, char** argv)
     {
       throw std::runtime_error("driver's serialized spectra/FASTA changed");
     }
-    std::ofstream receipt(std::filesystem::u8path(parameters.getValue(prefix + "receipt").toString()));
+    std::ofstream receipt(OpenMS::to_path(parameters.getValue(prefix + "receipt").toString()));
     receipt << "validated INI, mzML, FASTA and working directory\n";
     receipt.close();
     if (!receipt)
